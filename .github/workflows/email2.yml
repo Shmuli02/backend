@@ -1,0 +1,30 @@
+
+name: Email2
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  MONGO_URI: ${{ secrets.MONGO_URI }}
+  TEST_MONGO_URI: ${{ secrets.TEST_MONGO_URI }}
+  SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+  SENDER_EMAIL_PASSWORD: ${{ secrets.SENDER_EMAIL_PASSWORD }}
+  RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install backend dependencies
+        run: pip install -r ./requirements.txt
+      - name: Emailer
+        run: python3 src/emailer.py
